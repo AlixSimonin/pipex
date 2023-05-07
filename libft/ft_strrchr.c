@@ -1,19 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_char.c                                    :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 16:00:06 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/05 18:00:16 by asimonin         ###   ########.fr       */
+/*   Created: 2022/11/09 11:12:36 by asimonin          #+#    #+#             */
+/*   Updated: 2023/05/07 01:30:06 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_char(int c)
+char	*ft_strrchr(const char *s, int c)
 {
-	write(2, &c, 1);
-	return (1);
+	int	i;
+
+	i = ft_strlen(s);
+	if ((char)c == '\0')
+		return (&((char *)s)[i]);
+	while (i >= 0)
+	{
+		if (s[i] == (char)c)
+			return (&((char *)s)[i]);
+		i--;
+	}
+	return (NULL);
 }

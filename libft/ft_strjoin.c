@@ -1,19 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_char.c                                    :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 16:00:06 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/05 18:00:16 by asimonin         ###   ########.fr       */
+/*   Created: 2022/11/08 16:19:48 by asimonin          #+#    #+#             */
+/*   Updated: 2023/05/07 01:41:54 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_char(int c)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	write(2, &c, 1);
-	return (1);
+	size_t	size_s;
+	int		i;
+	int		j;
+	char	*res;
+
+	i = 0;
+	j = 0;
+	size_s = ft_strlen(s1)+ ft_strlen(s2);
+	res = malloc(sizeof(char) * (size_s + 1));
+	if (!res)
+		return (NULL);
+	while (s1[i])
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		res[i] = s2[j];
+		i++;
+		j++;
+	}
+	res[i] = '\0';
+	return (res);
 }

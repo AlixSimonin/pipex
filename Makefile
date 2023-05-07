@@ -4,20 +4,37 @@ PRINTF			=	ft_printf/libftprintf.a
 
 LIBFT			=	libft/libft.a
 
-GNL				=	get_next_line/get_next_line.c \
-					get_next_line/get_next_line_utils.c \
+DIR_SRCS		=	srcs/mandatory
 
-SRCS			=	srcs/main.c
+DIR_BONUS		=	srcs/bonus
 
-OBJS			=	${SRCS:.c=.o}
+DIR_OBJS		=	objs
 
-OBJS_GNL		=	${GNL:.c=.o}
+DIR_OBJS_B		=	objs_bonus
 
-INC				=	-Iincludes
+SRCS_NAMES		=	main.c  free_all.c  utils.c
+
+SRCS_NAMES_B	=	main_bonus.c  free_all_bonus.c 	utils_bonus.c
+
+OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
+
+OBJS_NAMES_B	=	${SRCS_NAMES_B:.c=.o}
+
+SRCS			=	$(addprefix $(DIR_SRCS)/,$(SRCS_NAMES))
+
+SRCS_B			=	$(addprefix $(DIR_BONUS)/,$(SRCS_NAMES_B))
+
+OBJS			=	$(addprefix $(DIR_OBJS)/,$(OBJS_NAMES))
+
+OBJS_B			=	$(addprefix $(DIR_OBJS_B)/,$(OBJS_NAMES_B))
+
+HEAD			=	-Iincludes
 
 CC				=	cc
 
-CFLAGS			=	-Wall -Werror -Wextra -g3
+CFLAGS			=	-g3 -Wall -Werror -Wextra
+
+MAKEFLAGS		=	--no-print-directory
 
 DEF_COLOR = \033[0;39m
 GREEN = \033[0;92m
@@ -26,26 +43,47 @@ MAGENTA = \033[0;95m
 
 all				:	${NAME}
 
-$(NAME): $(OBJS) ${OBJS_GNL}
+$(NAME): $(OBJS)
 	@make -C libft
 	@make -C ft_printf
-	cc $(OBJS) $(INC) ${OBJS_GNL} ${LIBFT} ${PRINTF} -o $(NAME)
-	@echo "$(GREEN)pipex executable files created!$(DEF_COLOR)"
+	@$(CC) $(CFLAGS) $(OBJS) ${LIBFT} ${PRINTF} ${HEAD} -o $(NAME)
+	@echo "\033[5;1m\033[38;5;117m		pipex		\033[0m"
 
-clean			:
-					@make clean -C libft
-					@make clean -C ft_printf
-					@rm -rf ${OBJS} ${OBJS_GNL}
-					@echo "$(BLUE)pipex object files cleaned!$(DEF_COLOR)"
 
-fclean			:	clean
-					@make fclean -C libft
-					@make fclean -C ft_printf
-					@rm -rf ${LIBFT}
-					@rm -rf ${PRINTF}
-					@rm -rf ${NAME}
-					@echo "$(MAGENTA)pipex executable files cleaned!$(DEF_COLOR)"
+$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c | $(DIR_OBJS)
+	$(CC) $(CFLAGS) -c $< -o $@ $(HEAD)
 
-re				:	fclean all
+$(DIR_OBJS):
+	mkdir -p $(DIR_OBJS)
 
-.PHONY			:	all clean fclean re bonus
+$(DIR_OBJS_B)/%.o: $(DIR_BONUS)/%.c | $(DIR_OBJS_B)
+	$(CC) $(CFLAGS) -c $< -o $@ $(HEAD)
+
+$(DIR_OBJS_B):
+	mkdir -p $(DIR_OBJS_B)
+
+bonus: $(OBJS_B)
+	@make -C libft
+	@make -C ft_printf
+	@$(CC) $(CFLAGS) $(OBJS_B) ${LIBFT} ${PRINTF} ${HEAD} -o $(NAME)
+	@echo "\033[5;1m\033[38;5;141m		pipex bonus		\033[39m"
+
+clean:
+	@make clean -C libft
+	@make clean -C ft_printf
+	@rm -rf ${DIR_OBJS}
+	@rm -rf ${DIR_OBJS_B}
+	@echo "$(BLUE)pipex object files cleaned!$(DEF_COLOR)"
+
+fclean:	clean
+	@make fclean -C libft
+	@make fclean -C ft_printf
+	@rm -rf ${LIBFT}
+	@rm -rf ${PRINTF}
+	@rm -rf ${NAME}
+	@echo "$(MAGENTA)pipex executable files cleaned!$(DEF_COLOR)"
+
+re:	fclean all
+
+.PHONY:	all clean fclean re bonus
+

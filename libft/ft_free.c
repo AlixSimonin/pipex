@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_char.c                                    :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 16:00:06 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/05 18:00:16 by asimonin         ###   ########.fr       */
+/*   Created: 2023/05/07 16:38:49 by asimonin          #+#    #+#             */
+/*   Updated: 2023/05/07 16:40:13 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_char(int c)
+void	ft_free(void **data)
 {
-	write(2, &c, 1);
-	return (1);
+	if (*data == NULL)
+		return ;
+	free(*data);
+	*data = NULL;
 }

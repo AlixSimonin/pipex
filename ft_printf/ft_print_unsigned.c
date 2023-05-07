@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 20:10:59 by asimonin          #+#    #+#             */
-/*   Updated: 2023/01/10 17:53:39 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:57:52 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_print_unsigned(unsigned int nbr)
 	char	*num;
 
 	if (nbr == 0)
-		len = write(1, "0", 1);
+		len = write(2, "0", 1);
 	else
 	{
 		num = ft_uns_itoa(nbr);
