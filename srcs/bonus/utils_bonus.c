@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 17:52:32 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 17:37:07 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:39:45 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@ void	close_fd(t_data *var)
 	close_(&var->fd[1]);
 }
 
-void	check_fd(t_data *var, int fd)
+void	redirect_too(t_data *var, int i)
 {
-	if (fd < 0)
+	if (i != 0)
 	{
-		perror("pipex");
-		free_all(var);
-		exit(1);
+		dup2(var->prev_pipe, STDIN_FILENO);
+		close_(&var->prev_pipe);
 	}
+	if (i != var->nbr_cmd - 1)
+		dup2(var->fd[1], 1);
+	close_fd(var);
 }
 
 /* if i = 0, its the 1st command, we need to redirect
@@ -38,26 +40,27 @@ void	redirect(t_data *var, int i)
 
 	if (i == 0)
 	{
-		fd = open(var->in, O_RDONLY);
-		check_fd(var, fd);
+		if (var->here_doc == 0)
+		{
+			fd = open(var->in, O_RDONLY);
+			check_fd(var, fd);
+		}
+		else
+			fd = var->here_docfd;
 		dup2(fd, STDIN_FILENO);
 		close_(&fd);
 	}
 	else if (i == var->nbr_cmd - 1)
 	{
-		fd = open(var->out, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		if (var->here_doc)
+			fd = open(var->out, O_CREAT | O_APPEND | O_WRONLY, 0666);
+		else
+			fd = open(var->out, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		check_fd(var, fd);
 		dup2(fd, STDOUT_FILENO);
 		close_(&fd);
 	}
-	if (i != 0)
-	{
-		dup2(var->prev_pipe, STDIN_FILENO);
-		close_(&var->prev_pipe);
-	}
-	if (i != var->nbr_cmd - 1)
-		dup2(var->fd[1], 1);
-	close_fd(var);
+	redirect_too(var, i);
 }
 
 char	*find_path(t_data *var, char *cmd)
@@ -67,6 +70,13 @@ char	*find_path(t_data *var, char *cmd)
 	char	*new;
 
 	i = 0;
+	if (var->path == NULL)
+	{
+		new = ft_strdup(cmd);
+		if (new == NULL)
+			free_all(var);
+		return (new);
+	}
 	while (var->path[i])
 	{
 		tmp = ft_strjoin(var->path[i], "/");

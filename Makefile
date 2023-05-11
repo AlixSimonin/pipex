@@ -14,7 +14,7 @@ DIR_OBJS_B		=	objs_bonus
 
 SRCS_NAMES		=	main.c  free_all.c  utils.c
 
-SRCS_NAMES_B	=	main_bonus.c  free_all_bonus.c 	utils_bonus.c
+SRCS_NAMES_B	=	main_bonus.c  free_all_bonus.c  utils_bonus.c  here_doc.c
 
 OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
 
@@ -34,7 +34,7 @@ CC				=	cc
 
 CFLAGS			=	-g3 -Wall -Werror -Wextra
 
-MAKEFLAGS		=	--no-print-directory
+# MAKEFLAGS		=	--no-print-directory
 
 DEF_COLOR = \033[0;39m
 GREEN = \033[0;92m
@@ -65,7 +65,7 @@ $(DIR_OBJS_B):
 bonus: $(OBJS_B)
 	@make -C libft
 	@make -C ft_printf
-	@$(CC) $(CFLAGS) $(OBJS_B) ${LIBFT} ${PRINTF} ${HEAD} -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS_B) ${OBJS_GNL} ${LIBFT} ${PRINTF} ${HEAD} -o $(NAME)
 	@echo "\033[5;1m\033[38;5;141m		pipex bonus		\033[39m"
 
 clean:

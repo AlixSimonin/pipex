@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:30:24 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 17:40:08 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:08:07 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <errno.h>
 
 # include "../ft_printf/ft_printf.h"
-# include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 
 typedef struct s_data
@@ -47,7 +46,6 @@ int		main(int ac, char **av, char **env);
 void	init(int ac, char **av, t_data *var);
 void	get_path(t_data *var, char **env);
 void	free_all(t_data *var);
-void	free_tab(char **tab);
 void	redirect(t_data *var, int i);
 void	child_process(t_data *var, int i, char *cmd, char **env);
 void	parent_process(t_data *var);

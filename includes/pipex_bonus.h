@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:30:24 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 17:40:34 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:02:35 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <errno.h>
 
 # include "../ft_printf/ft_printf.h"
-# include "../get_next_line/get_next_line.h"
 # include "../libft/libft.h"
 
 typedef struct s_data
@@ -31,14 +30,16 @@ typedef struct s_data
 	int		nbr_cmd;
 	int		prev_pipe;
 	int		status;
+	int		here_doc;
+	int		here_docfd;
 	int		fd[2];
 	int		*pid;
 	char	*out;
 	char	*in;
 	char	*cmd;
+	char	*limiter;
 	char	**cmd_flag;
 	char	**path;
-	int		here_doc;
 }	t_data;
 
 // sources //
@@ -53,6 +54,9 @@ void	redirect(t_data *var, int i);
 void	child_process(t_data *var, int i, char *cmd, char **env);
 void	parent_process(t_data *var);
 void	close_(int *fd);
+void	here_doc(t_data *var);
+void	check_fd(t_data *var, int fd);
+void	close_fd(t_data *var);
 
 char	*find_path(t_data *var, char *cmd);
 

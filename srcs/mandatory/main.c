@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 16:34:34 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 23:43:34 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:20:43 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void	child_process(t_data *var, int i, char *cmd, char **env)
 	if (errno == 13 && (ft_strrchr(var->cmd_flag[0], '/')))
 		ft_printf("%s: Permission denied\n", var->cmd_flag[0]);
 	else if (ft_strrchr(var->cmd_flag[0], '/'))
-		ft_printf("%s: no such file or directory\n", var->cmd_flag[0]);
+		ft_printf("%s: No such file or directory\n", var->cmd_flag[0]);
 	else
-		ft_printf("%s: command not found\n", var->cmd_flag[0]);
+		ft_printf("%s: Command not found\n", var->cmd_flag[0]);
 	free_all(var);
 }
 

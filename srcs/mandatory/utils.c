@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 17:52:32 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 23:43:45 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/09 23:54:22 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	check_fd(t_data *var, int fd)
 	if (fd < 0)
 	{
 		perror("pipex");
+		close_fd(var);
 		free_all(var);
 		exit(1);
 	}
@@ -67,6 +68,13 @@ char	*find_path(t_data *var, char *cmd)
 	char	*new;
 
 	i = 0;
+	if (var->path == NULL)
+	{
+		new = ft_strdup(cmd);
+		if (new == NULL)
+			free_all(var);
+		return (new);
+	}
 	while (var->path && var->path[i])
 	{
 		tmp = ft_strjoin(var->path[i], "/");

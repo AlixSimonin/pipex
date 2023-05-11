@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all_bonus.c                                   :+:      :+:    :+:   */
+/*   ft_free_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/03 23:46:12 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/10 21:07:58 by asimonin         ###   ########.fr       */
+/*   Created: 2023/05/10 21:05:59 by asimonin          #+#    #+#             */
+/*   Updated: 2023/05/10 21:08:28 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "libft.h"
 
 void	ft_free_tab(char **tab)
 {
@@ -22,15 +22,4 @@ void	ft_free_tab(char **tab)
 	while (tab[++i])
 		ft_free((void **)&tab[i]);
 	ft_free((void **)&tab);
-}
-
-void	free_all(t_data *var)
-{
-	if (var -> path)
-		ft_free_tab(var->path);
-	if (var->cmd_flag)
-		ft_free_tab(var->cmd_flag);
-	ft_free((void **)&var->cmd);
-	ft_free((void **)&var -> pid);
-	exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: asimonin <asimonin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 16:34:34 by asimonin          #+#    #+#             */
-/*   Updated: 2023/05/07 17:37:03 by asimonin         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:37:17 by asimonin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,23 @@ void	close_(int *fd)
 void	init(int ac, char **av, t_data *var)
 {
 	ft_memset(var, 0, sizeof(t_data));
-	if (ac > 5 && ft_strcmp("here_doc", av[1]))
+	var->here_docfd = -1;
+	if (ac > 5 && ft_strcmp("here_doc", av[1]) == 0)
 		var->here_doc = 1;
 	if (ac < 5 && var->here_doc)
 	{
-		ft_printf("Usage: ./pipex here_doc delim cmd1 cmd2 cmd.. out\n");
-		exit(EXIT_FAILURE);
+		ft_printf("Usage: ./pipex here_doc LIMITER cmd1 cmd2 cmd.. out\n");
+		exit(1);
 	}
-	var -> nbr_cmd = ac - 3;
+	if (var -> here_doc)
+	{
+		var->limiter = ft_strjoin(av[2], "\n");
+		here_doc(var);
+	}
+	else
+		var -> in = av[1];
+	var -> nbr_cmd = ac - 3 - var->here_doc;
 	var -> pid = malloc(sizeof(int) * (var -> nbr_cmd));
-	var -> in = av[1];
 	var -> out = av[ac - 1];
 	var -> prev_pipe = -1;
 }
@@ -46,16 +53,26 @@ void	child_process(t_data *var, int i, char *cmd, char **env)
 {
 	redirect(var, i);
 	var->cmd_flag = ft_split(cmd, ' ');
+	if (!var->cmd_flag || !*var->cmd_flag)
+	{
+		ft_printf("\"\": Command not found\n");
+		free_all(var);
+	}
 	if (!ft_strrchr(cmd, '/'))
 	{
 		get_path(var, env);
 		var->cmd = find_path(var, var->cmd_flag[0]);
 	}
 	else
-		var->cmd = var -> cmd_flag[0];
+		var->cmd = ft_strdup(var -> cmd_flag[0]);
 	if (var->cmd)
 		execve(var->cmd, var->cmd_flag, env);
-	ft_printf("pipex: command not found\n");
+	if (errno == 13 && (ft_strrchr(var->cmd_flag[0], '/')))
+		ft_printf("%s: Permission denied\n", var->cmd_flag[0]);
+	else if (ft_strrchr(var->cmd_flag[0], '/'))
+		ft_printf("%s: No such file or directory\n", var->cmd_flag[0]);
+	else
+		ft_printf("%s: Command not found\n", var->cmd_flag[0]);
 	free_all(var);
 }
 
@@ -65,6 +82,7 @@ once we read we can close the write end */
 
 void	parent_process(t_data *var)
 {
+	close_(&var->here_docfd);
 	close_(&var->fd[1]);
 	if (var->prev_pipe != -1)
 		close_(&var->prev_pipe);

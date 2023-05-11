@@ -8,7 +8,11 @@ SRCS = 	ft_calloc.c \
 		ft_strrchr.c \
 		ft_strdup.c \
 		ft_free.c \
+		ft_free_tab.c \
 		ft_strcmp.c \
+		ft_putstr_fd.c \
+		get_next_line.c \
+		get_next_line_utils.c \
 		
 OBJS = ${SRCS:.c=.o}
 
